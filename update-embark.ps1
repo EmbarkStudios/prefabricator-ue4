@@ -22,9 +22,15 @@ $files | foreach {
 
 
 $sha = (git rev-parse HEAD)
-$remote = (git remote get-url --push origin)
+$origin = (git remote get-url --push origin)
+$branch = (git branch --show-current)
 
-$pluginOrigin = New-Item -ItemType File -Path (join-path $pluginRoot "PLUGIN_ORIGIN.txt")
-$remote >> $pluginOrigin
-"commit $sha" >> $pluginOrigin
+$pluginOrigin = New-Item -ItemType File -Path (join-path $pluginRoot "PLUGIN_ORIGIN.json")
+"{" >> $pluginOrigin
+"  `"origin`": `"$origin`"," >> $pluginOrigin
+"  `"branch`": `"$branch`"," >> $pluginOrigin
+"  `"commit`": `"$sha`"" >> $pluginOrigin
+"}" >> $pluginOrigin
+
+
 
