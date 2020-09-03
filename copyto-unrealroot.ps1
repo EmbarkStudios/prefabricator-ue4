@@ -5,12 +5,10 @@ param (
 	[string]$ueroot
 )
 
-$pluginRoot = join-path $ueroot "Engine\Plugins\Marketplace\Prefabricator"
-if (test-path $pluginRoot) {
-	remove-item $pluginRoot -recurse -force
-}
-new-item $pluginRoot -ItemType Directory
-$files = git ls-tree -r --name-only embark
+$pluginName = "Prefabricator"
+$pluginRoot = join-path $ueroot "Engine\Plugins\Marketplace\$pluginName"
+
+$files = (git ls-tree -r --name-only embark) | Select-String "\.ps1$" -NotMatch
 $files | foreach {
 	$src = $_
 	if (test-path $src -PathType Leaf) {
@@ -20,12 +18,16 @@ $files | foreach {
 	}
 }
 
-
 $sha = (git rev-parse HEAD)
 $origin = (git remote get-url --push origin)
 $branch = (git branch --show-current)
 
-$pluginOrigin = New-Item -ItemType File -Path (join-path $pluginRoot "PLUGIN_ORIGIN.json")
+$infoPath = (join-path $pluginRoot "PLUGIN_ORIGIN.json")
+if (Test-Path $infoPath) {
+	remove-item $infoPath
+}
+
+$pluginOrigin = New-Item -ItemType File -Path $infoPath
 "{" >> $pluginOrigin
 "  `"origin`": `"$origin`"," >> $pluginOrigin
 "  `"branch`": `"$branch`"," >> $pluginOrigin
