@@ -12,8 +12,8 @@ $pluginRoot = join-path $ueroot "Engine\Plugins\Marketplace\$pluginName"
 $files = git ls-tree -r --name-only embark
 $files | foreach {
 	$dest = $_
-	if (test-path $dest -PathType Leaf) {
-		$src = (join-path $pluginRoot $dest)
+	$src = (join-path $pluginRoot $dest)
+	if ((test-path $dest -PathType Leaf) -and (test-path $src)) {
 		copy-item $src $dest
 	}
 }
