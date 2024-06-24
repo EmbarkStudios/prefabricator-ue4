@@ -7,9 +7,9 @@ param (
 
 $pluginName = "Prefabricator"
 
-$pluginRoot = join-path $ueroot "Engine\Plugins\Marketplace\$pluginName"
+$pluginRoot = join-path $ueroot "Engine\Plugins\$pluginName"
 
-$files = git ls-tree -r --name-only embark
+$files = git ls-tree -r --name-only embark-5.3
 $files | foreach {
 	$dest = $_
 	$src = (join-path $pluginRoot $dest)

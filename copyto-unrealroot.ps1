@@ -6,9 +6,9 @@ param (
 )
 
 $pluginName = "Prefabricator"
-$pluginRoot = join-path $ueroot "Engine\Plugins\Marketplace\$pluginName"
+$pluginRoot = join-path $ueroot "Engine\Plugins\$pluginName"
 
-$files = (git ls-tree -r --name-only embark) | Select-String "\.ps1$" -NotMatch
+$files = (git ls-tree -r --name-only embark-5.3) | Select-String "\.ps1$" -NotMatch
 $files | foreach {
 	$src = $_
 	if (test-path $src -PathType Leaf) {
